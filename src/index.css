@@ -1,0 +1,18 @@
+html {
+    font-family: 'Inter', sans-serif;
+}
+body {
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #FAFAFA;
+    height: 100vh;
+}
+
+#canvas {
+    z-index: -1;
+    width: 100vw;
+    height: 100vh;
+    overflow-y: hidden;
+    background-color: #FAFAFA;
+}
