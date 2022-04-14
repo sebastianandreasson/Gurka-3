@@ -21,7 +21,7 @@ export default function Cucumber({ ...props }) {
     <group ref={group} {...props} dispose={null}>
       <group
         ref={ref}
-        position={[-0.25, -0.05, 2.5]}
+        position={[-0.25, -0.05, 2]}
         rotation={[0, Math.PI / 2, 0]}
         scale={0.04}
       >

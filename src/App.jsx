@@ -12,6 +12,7 @@ import {
   MeshReflectorMaterial,
   FirstPersonControls,
   FlyControls,
+  PointerLockControls,
 } from '@react-three/drei'
 import { LayerMaterial, Color, Depth } from 'lamina'
 import Cucumber from './components/Cucumber'
@@ -23,39 +24,20 @@ import {
   Vignette,
 } from '@react-three/postprocessing'
 import Page from './Page'
+import { useAtom, useAtomValue } from 'jotai'
+import { exploringAtom } from './state'
+import { Player } from './components/Player'
+import { Physics, usePlane } from '@react-three/cannon'
 
 const GOLDENRATIO = 1.61803398875
-
-function MovingSpots({ positions = [2, 0, 2, 0, 2, 0, 2, 0] }) {
-  const group = useRef()
-  useFrame(
-    (state, delta) =>
-      (group.current.position.z += delta * 15) > 60 &&
-      (group.current.position.z = -60)
-  )
-  return (
-    <group rotation={[0, 0.5, 0]}>
-      <group ref={group}>
-        {positions.map((x, i) => (
-          <Lightformer
-            form="circle"
-            intensity={4}
-            rotation={[Math.PI / 2, 0, 0]}
-            position={[x, 4, i * 4]}
-            scale={[3, 1, 1]}
-          />
-        ))}
-      </group>
-    </group>
-  )
-}
 
 function Frames({
   images,
   q = new THREE.Quaternion(),
   p = new THREE.Vector3(),
 }) {
-  const [id, setId] = useState('Greger')
+  const exploring = useAtomValue(exploringAtom)
+  const [id, setId] = useState()
   const ref = useRef()
   const clicked = useRef()
   useEffect(() => {
@@ -70,8 +52,8 @@ function Frames({
     }
   })
   useFrame((state, dt) => {
-    state.camera.position.lerp(p, 0.025)
-    state.camera.quaternion.slerp(q, 0.025)
+    if (!exploring) state.camera.position.lerp(p, 0.025)
+    if (!exploring) state.camera.quaternion.slerp(q, 0.025)
   })
   return (
     <group
@@ -86,7 +68,19 @@ function Frames({
   )
 }
 
+export const Ground = (props) => {
+  const [ref] = usePlane(() => ({ rotation: [-Math.PI / 2, 0, 0], ...props }))
+  return (
+    <mesh ref={ref} receiveShadow>
+      <planeGeometry args={[1000, 1000]} />
+      <meshBasicMaterial visible={false} />
+      {/* <meshStandardMaterial  /> */}
+    </mesh>
+  )
+}
+
 const App = () => {
+  const [exploring, setExploring] = useAtom(exploringAtom)
   return (
     <div id="canvas">
       <Canvas shadows>
@@ -151,7 +145,18 @@ const App = () => {
             },
           ]}
         />
-        {/* <FirstPersonControls movementSpeed={2} /> */}
+        {exploring && (
+          <>
+            <PointerLockControls
+              movementSpeed={1}
+              onUnlock={() => setExploring(false)}
+            />
+            <Physics>
+              <Player />
+              <Ground />
+            </Physics>
+          </>
+        )}
         <Environment preset="warehouse" />
         {/* <ContactShadows
           resolution={1024}
