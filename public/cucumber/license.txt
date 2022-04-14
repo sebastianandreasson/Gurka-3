@@ -1,0 +1,11 @@
+Model Information:
+* title:	Cucumber
+* source:	https://sketchfab.com/3d-models/cucumber-0aef5e1b2ef446d7a5663674e75d45c8
+* author:	db4 (https://sketchfab.com/db4)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Cucumber" (https://sketchfab.com/3d-models/cucumber-0aef5e1b2ef446d7a5663674e75d45c8) by db4 (https://sketchfab.com/db4) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

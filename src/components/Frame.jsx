@@ -5,7 +5,14 @@ import { useCursor, Image, Text, ContactShadows } from '@react-three/drei'
 
 const GOLDENRATIO = 1.61803398875
 
-function Frame({ url, name, c = new THREE.Color(), ...props }) {
+function Frame({
+  url,
+  name,
+  species,
+  description,
+  c = new THREE.Color(),
+  ...props
+}) {
   const [hovered, hover] = useState(false)
   const image = useRef()
   const frame = useRef()
@@ -27,6 +34,7 @@ function Frame({ url, name, c = new THREE.Color(), ...props }) {
     <group {...props}>
       <mesh
         name={name}
+        castShadow
         onPointerOver={(e) => (e.stopPropagation(), hover(true))}
         onPointerOut={() => hover(false)}
         scale={[1, GOLDENRATIO, 0.05]}
@@ -34,7 +42,7 @@ function Frame({ url, name, c = new THREE.Color(), ...props }) {
       >
         <boxGeometry />
         <meshStandardMaterial
-          color="#151515"
+          color="#000"
           metalness={0.9}
           roughness={0.8}
           envMapIntensity={2}
@@ -55,19 +63,6 @@ function Frame({ url, name, c = new THREE.Color(), ...props }) {
           url={url}
         />
       </mesh>
-      <ContactShadows
-        resolution={1024}
-        frames={1}
-        position={[
-          props.position[0],
-          props.position[1] - 0.15,
-          props.position[2],
-        ]}
-        scale={6}
-        blur={2.5}
-        opacity={1}
-        far={10}
-      />
       <Text
         maxWidth={0.1}
         anchorX="left"
@@ -88,7 +83,18 @@ function Frame({ url, name, c = new THREE.Color(), ...props }) {
         font="/fonts/Inter-ThinItalic.woff"
         color="#151515"
       >
-        Telegraph improved
+        {species}
+      </Text>
+      <Text
+        maxWidth={1}
+        anchorX="left"
+        anchorY="top"
+        position={[0.55, GOLDENRATIO - 0.355, 0]}
+        fontSize={0.04}
+        font="/fonts/Inter-ThinItalic.woff"
+        color="#151515"
+      >
+        {description}
       </Text>
     </group>
   )
