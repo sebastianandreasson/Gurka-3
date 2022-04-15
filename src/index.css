@@ -5,7 +5,6 @@ body {
     margin: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #FAFAFA;
     height: 100vh;
 }
 
@@ -14,5 +13,4 @@ body {
     width: 100vw;
     height: 100vh;
     overflow-y: hidden;
-    background-color: #FAFAFA;
 }

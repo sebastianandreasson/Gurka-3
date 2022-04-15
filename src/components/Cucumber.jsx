@@ -19,12 +19,7 @@ export default function Cucumber({ ...props }) {
 
   return (
     <group ref={group} {...props} dispose={null}>
-      <group
-        ref={ref}
-        position={[-0.25, 0.25, 2]}
-        rotation={[0, Math.PI / 2, 0]}
-        scale={0.04}
-      >
+      <group ref={ref} rotation={[0, Math.PI / 2, 0]} scale={1}>
         <mesh
           castShadow
           geometry={nodes.Stereo_textured_mesh_Material0_0.geometry}

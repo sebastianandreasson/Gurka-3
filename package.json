@@ -26,6 +26,7 @@
     "@react-three/postprocessing": "^2.3.2",
     "jotai": "^1.6.3",
     "lamina": "^1.1.13",
+    "postprocessing": "^6.26.3",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "styled-components": "^5.3.5",
