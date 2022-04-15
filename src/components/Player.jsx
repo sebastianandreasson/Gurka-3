@@ -2,6 +2,9 @@ import * as THREE from 'three'
 import React, { useEffect, useRef, useState } from 'react'
 import { useSphere } from '@react-three/cannon'
 import { useThree, useFrame } from '@react-three/fiber'
+import { PointerLockControls } from '@react-three/drei'
+import { useAtom } from 'jotai'
+import { exploringAtom } from '../state'
 
 const SPEED = 5
 const keys = {
@@ -15,7 +18,6 @@ const moveFieldByKey = (key) => keys[key]
 const direction = new THREE.Vector3()
 const frontVector = new THREE.Vector3()
 const sideVector = new THREE.Vector3()
-const rotation = new THREE.Vector3()
 const speed = new THREE.Vector3()
 
 const usePlayerControls = () => {
@@ -42,6 +44,7 @@ const usePlayerControls = () => {
 }
 
 export const Player = (props) => {
+  const [, setExploring] = useAtom(exploringAtom)
   const [ref, api] = useSphere(() => ({
     mass: 1,
     type: 'Dynamic',
@@ -52,7 +55,7 @@ export const Player = (props) => {
   const { camera } = useThree()
   const velocity = useRef([0, 0, 0])
   useEffect(() => api.velocity.subscribe((v) => (velocity.current = v)), [])
-  useFrame((state) => {
+  useFrame(() => {
     ref.current.getWorldPosition(camera.position)
     frontVector.set(0, 0, Number(backward) - Number(forward))
     sideVector.set(Number(left) - Number(right), 0, 0)
@@ -68,6 +71,10 @@ export const Player = (props) => {
   })
   return (
     <>
+      <PointerLockControls
+        movementSpeed={1}
+        onUnlock={() => setExploring(false)}
+      />
       <mesh ref={ref} />
     </>
   )

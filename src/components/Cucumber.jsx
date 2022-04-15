@@ -11,9 +11,9 @@ export default function Cucumber({ ...props }) {
   useFrame((state) => {
     ref.current.rotation.x += 0.015
     ref.current.position.y = THREE.MathUtils.lerp(
-      ref.current.position.y,
+      ref.current.position.y + 0.1,
       Math.sin(state.clock.elapsedTime) / 25,
-      0.1
+      0.5
     )
   })
 
@@ -21,7 +21,7 @@ export default function Cucumber({ ...props }) {
     <group ref={group} {...props} dispose={null}>
       <group
         ref={ref}
-        position={[-0.25, -0.05, 2]}
+        position={[-0.25, 0.25, 2]}
         rotation={[0, Math.PI / 2, 0]}
         scale={0.04}
       >

@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import React, { useRef, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { useCursor, Image, Text, ContactShadows } from '@react-three/drei'
+import { useCursor, Image, Text } from '@react-three/drei'
 
 const GOLDENRATIO = 1.61803398875
 
@@ -20,12 +20,12 @@ function Frame({
   useFrame(() => {
     image.current.scale.x = THREE.MathUtils.lerp(
       image.current.scale.x,
-      0.85 * (hovered ? 0.85 : 1),
+      0.85 * (hovered ? 0.9 : 1),
       0.1
     )
     image.current.scale.y = THREE.MathUtils.lerp(
       image.current.scale.y,
-      0.9 * (hovered ? 0.905 : 1),
+      0.9 * (hovered ? 0.955 : 1),
       0.1
     )
   })
@@ -42,7 +42,7 @@ function Frame({
       >
         <boxGeometry />
         <meshStandardMaterial
-          color="#000"
+          color="#252525"
           metalness={0.9}
           roughness={0.8}
           envMapIntensity={2}

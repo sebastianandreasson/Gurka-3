@@ -1,7 +1,7 @@
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import React, { useCallback, useEffect } from 'react'
 import styled from 'styled-components'
-import { exploringAtom } from './state'
+import { exploringAtom, selectedGurkAtom } from './state'
 
 const Container = styled.div`
   z-index: 1;
@@ -12,7 +12,6 @@ const Container = styled.div`
     padding: 0;
     height: 7rem;
     font-size: 8rem;
-    // font-weight: 900;
     font-family: 'Playfair Display', serif;
   }
 
@@ -25,17 +24,41 @@ const MainTitle = styled.h1`
   left: 2rem;
   top: 0;
   position: absolute;
-  font-style: italic;
-  font-weight: 200;
+
+  display: flex;
+  flex-direction: column;
+
+  > span {
+    font-style: italic;
+    font-weight: 200;
+  }
+  > strong {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    line-height: 4rem;
+  }
 
   opacity: ${(props) => (props.visible ? 1 : 0)};
 `
-const SubTitle = styled.h1`
-  position: absolute;
+const SmallTitle = styled.h1`
   left: 2rem;
-  top: 7rem;
-  font-family: 'Playfair Display', serif;
-  font-weight: 900;
+  top: 2rem;
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+
+  > span {
+    font-size: 3rem;
+    font-style: italic;
+    font-weight: 200;
+  }
+  > strong {
+    margin-left: 0.5rem;
+    font-size: 3rem;
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+  }
+
   opacity: ${(props) => (props.visible ? 1 : 0)};
 `
 
@@ -74,25 +97,21 @@ const Logo = styled.img`
 
 const Page = () => {
   const [exploring, setExploring] = useAtom(exploringAtom)
-  const escFunction = useCallback(
-    (event) => {
-      if (event.key === 'Escape') {
-        setExploring(false)
-      }
-    },
-    [setExploring]
-  )
+  const selectedGurka = useAtomValue(selectedGurkAtom)
 
   return (
     <Container>
       <EscapeText visible={exploring}>Press escape to exit</EscapeText>
-      <MainTitle visible={!exploring}>Gurk</MainTitle>
-      <SubTitle visible={!exploring}>Galleri</SubTitle>
+      <MainTitle visible={!exploring && !selectedGurka}>
+        <span>Gurk</span>
+        <strong>Galleri</strong>
+      </MainTitle>
+      <SmallTitle visible={!exploring && !!selectedGurka}>
+        <span>Gurk</span>
+        <strong>Galleri</strong>
+      </SmallTitle>
 
-      <ExploreButton
-        visible={!exploring}
-        onClick={() => setExploring(!exploring)}
-      >
+      <ExploreButton visible={!exploring} onClick={() => setExploring(true)}>
         Explore as gurka
       </ExploreButton>
       <Logo src="/logo.png" />
