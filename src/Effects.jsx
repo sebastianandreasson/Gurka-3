@@ -43,7 +43,7 @@ const Effects = () => {
       <EffectComposer>
         <Noise opacity={0.05} />
         <Vignette eskil={false} offset={0.00001} darkness={0.55} />
-        {lightMesh && (
+        {/* {lightMesh && (
           <GodRays
             sun={lightMesh}
             blendFunction={BlendFunction.Screen} // The blend function of this effect.
@@ -58,7 +58,7 @@ const Effects = () => {
             kernelSize={KernelSize.SMALL} // The blur kernel size. Has no effect if blur is disabled.
             blur={true} // Whether the god rays should be blurred to reduce artifacts.
           />
-        )}
+        )} */}
         {/* <SSAO
           blendFunction={BlendFunction.MULTIPLY} // Use NORMAL to see the effect
           samples={31}

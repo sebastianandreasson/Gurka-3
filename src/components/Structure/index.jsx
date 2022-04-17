@@ -1,4 +1,4 @@
-import { useTexture } from '@react-three/drei'
+import { Instance, Instances, Merged, useGLTF } from '@react-three/drei'
 import React from 'react'
 import ColumnModel from './ColumnModel'
 
@@ -29,26 +29,40 @@ const roofPositions = grid[0]
 
 const Roof = () => {
   return (
-    <group>
-      {roofPositions.map((pos) => (
-        <mesh position={pos} rotation={[Math.PI / 2, 0, 0]}>
-          <planeBufferGeometry args={[roofWidth * 0.8, 1500]} />
-          <meshStandardMaterial color="#FAFAFA" />
-        </mesh>
+    <Instances>
+      <planeBufferGeometry args={[roofWidth * 0.8, 1500]} />
+      <meshStandardMaterial color="#FAFAFA" />
+      {roofPositions.map((pos, i) => (
+        <Instance
+          position={pos}
+          rotation={[Math.PI / 2, 0, 0]}
+          key={`Roof_${i}`}
+        />
       ))}
-    </group>
+    </Instances>
   )
 }
 
 const Structure = () => {
+  const { nodes, materials } = useGLTF('/column2.glb')
   return (
     <>
-      {columnPositions.map((position, index) => (
-        <ColumnModel key={index} position={position} />
-      ))}
+      <Instances geometry={nodes.Column.geometry} material={materials.default}>
+        {columnPositions.map((position, index) => (
+          <group key={index} position={position}>
+            <Instance
+              key={index}
+              position={[0, 10, 0]}
+              scale={[0.1, 0.135, 0.1]}
+            />
+          </group>
+        ))}
+      </Instances>
       <Roof />
     </>
   )
 }
+
+useGLTF.preload('/column2.glb')
 
 export default Structure

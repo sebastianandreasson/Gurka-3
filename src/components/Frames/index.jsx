@@ -3,13 +3,14 @@ import { useFrame } from '@react-three/fiber'
 import Frame from './Frame'
 import * as THREE from 'three'
 import { useAtom, useAtomValue } from 'jotai'
-import { exploringAtom, gurkAtom, selectedGurkAtom } from '../../state'
+import { exploringAtom, selectedGurkAtom } from '../../state'
+import { useGurkor } from '../../hooks/api'
 
 const GOLDENRATIO = 1.61803398875
 
 function Frames({ q = new THREE.Quaternion(), p = new THREE.Vector3() }) {
   const exploring = useAtomValue(exploringAtom)
-  const gurkor = useAtomValue(gurkAtom)
+  const gurkor = useGurkor()
   const [id, setId] = useAtom(selectedGurkAtom)
   const ref = useRef()
   const clicked = useRef()

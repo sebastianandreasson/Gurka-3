@@ -12,6 +12,7 @@ import Frames from './components/Frames'
 import Fog from './components/Fog'
 import Effects from './Effects'
 import Structure from './components/Structure'
+import { Perf } from 'r3f-perf'
 
 export const Ground = (props) => {
   const [ref] = usePlane(() => ({ rotation: [-Math.PI / 2, 0, 0], ...props }))
@@ -48,6 +49,7 @@ const App = () => {
   return (
     <div id="canvas">
       <Canvas shadows>
+        <Perf />
         <ambientLight color={color} />
         <directionalLight
           color={color}

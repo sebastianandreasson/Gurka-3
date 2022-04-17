@@ -1,19 +1,63 @@
 import * as THREE from 'three'
 import React, { useRef, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { useCursor, Image, Text } from '@react-three/drei'
+import { useCursor, Image, Text, Html } from '@react-three/drei'
+import styled from 'styled-components'
+import { useAtomValue } from 'jotai'
+import { selectedGurkAtom } from '../../state'
+
+const SliderInput = styled.input`
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  background: #fafafa;
+  outline: none;
+  border-radius: 2px;
+
+  ::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #252525;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+`
+
+const Slider = ({ value, max, setValue }) => {
+  return (
+    <Html
+      center
+      style={{ top: 80, width: '250px' }}
+      scale={0.15}
+      position={[0, -0.05, 0.025]}
+      transform
+      occlude
+    >
+      <SliderInput
+        background="#252525"
+        type="range"
+        min={1}
+        max={max}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      ></SliderInput>
+    </Html>
+  )
+}
 
 const GOLDENRATIO = 1.61803398875
-
 function Frame({
-  url,
+  images,
   name,
   species,
   description,
   c = new THREE.Color(),
   ...props
 }) {
+  const selected = useAtomValue(selectedGurkAtom)
   const [hovered, hover] = useState(false)
+  const [index, setIndex] = useState(1)
   const image = useRef()
   const frame = useRef()
   useCursor(hovered)
@@ -60,9 +104,12 @@ function Frame({
           raycast={() => null}
           ref={image}
           position={[0, 0, 0.7]}
-          url={url}
+          url={images[index - 1].url}
         />
       </mesh>
+      {selected && selected === name && (
+        <Slider value={index} setValue={setIndex} max={images.length} />
+      )}
       <Text
         maxWidth={0.1}
         anchorX="left"
