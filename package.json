@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "server": "node ./lib/index.js"
   },
   "repository": {
     "type": "git",
@@ -24,15 +25,24 @@
     "@react-three/drei": "^9.4.2",
     "@react-three/fiber": "^8.0.11",
     "@react-three/postprocessing": "^2.3.2",
+    "aws-sdk": "^2.1116.0",
+    "axios": "^0.26.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
     "jotai": "^1.6.3",
     "lamina": "^1.1.13",
+    "moment": "^2.29.2",
     "postprocessing": "^6.26.3",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "styled-components": "^5.3.5",
-    "three": "^0.139.2"
+    "three": "^0.139.2",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "r3f-perf": "^6.0.1",
     "vite": "^2.9.3"
-  }
+  },
+  "type": "module"
 }
