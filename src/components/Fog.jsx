@@ -9,7 +9,7 @@ const Fog = ({ color }) => {
         vec3 fogDirection = normalize(vWorldPosition - fogOrigin);
         float fogDepth = distance(vWorldPosition, fogOrigin);
 
-        float heightFactor = 0.04;
+        float heightFactor = 0.025;
         float fogFactor = exp(-fogOrigin.y * fogDensity) * (
           1.0 - exp(-fogDepth * -fogDirection.y * fogDensity)) / -fogDirection.y;
         fogFactor = fogFactor * heightFactor;
