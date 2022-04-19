@@ -6,7 +6,7 @@ import { useFrame } from '@react-three/fiber'
 export default function Cucumber({ ...props }) {
   const group = useRef()
   const ref = useRef()
-  const { nodes, materials } = useGLTF('/cucumber/scene.gltf')
+  const { nodes, materials } = useGLTF('/gurka.glb')
 
   useFrame((state) => {
     ref.current.rotation.x += 0.015
@@ -30,4 +30,4 @@ export default function Cucumber({ ...props }) {
   )
 }
 
-useGLTF.preload('/cucumber/scene.gltf')
+useGLTF.preload('/gurka.glb')
