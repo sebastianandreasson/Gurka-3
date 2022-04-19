@@ -1,4 +1,11 @@
-import { Instance, Instances, Merged, useGLTF } from '@react-three/drei'
+import * as THREE from 'three'
+import {
+  BakeShadows,
+  Instance,
+  Instances,
+  Merged,
+  useGLTF,
+} from '@react-three/drei'
 import React from 'react'
 import ColumnModel from './ColumnModel'
 
@@ -14,23 +21,24 @@ const generateGrid = (width) => {
   }
   return arr
 }
-const grid = generateGrid(20)
+const grid = generateGrid(10)
 
 const columnPositions = grid.flatMap((row) => row)
-const roofParts = 4
+const roofParts = 3
 const roofWidth = size / roofParts
 const roofPositions = grid[0]
   .map((col) => {
-    return Array.from({ length: roofParts }).map((_, i) => {
+    return Array.from({ length: roofParts * 10 }).map((_, i) => {
       return [col[0] - roofWidth * i, col[1] + 20, col[2]]
     })
   })
   .flatMap((x) => x)
+const roofGeometry = new THREE.PlaneBufferGeometry(roofWidth * 0.7, 1500)
 
 const Roof = () => {
   return (
-    <Instances>
-      <planeBufferGeometry args={[roofWidth * 0.8, 1500]} />
+    <Instances castShadow geometry={roofGeometry} position={[100, 0, 0]}>
+      {/* <meshStandardMaterial color="#FAFAFA" opacity={0.01} transparent /> */}
       <meshStandardMaterial color="#FAFAFA" />
       {roofPositions.map((pos, i) => (
         <Instance
@@ -47,9 +55,14 @@ const Structure = () => {
   const { nodes, materials } = useGLTF('/column2.glb')
   return (
     <>
-      <Instances geometry={nodes.Column.geometry} material={materials.default}>
+      <Instances
+        geometry={nodes.Column.geometry}
+        material={materials.default}
+        castShadow
+        receiveShadow
+      >
         {columnPositions.map((position, index) => (
-          <group key={index} position={position}>
+          <group key={index} position={position} castShadow>
             <Instance
               key={index}
               position={[0, 10, 0]}

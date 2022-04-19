@@ -1,5 +1,12 @@
 import { atom } from 'jotai'
 
+export const socketAtom = atom(null)
+
+export const visitorsAtom = atom([])
+export const globalPositions = {
+  visitors: {},
+}
+
 export const exploringAtom = atom(false)
 
 export const gurkAtom = atom([])

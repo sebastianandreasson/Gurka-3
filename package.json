@@ -32,10 +32,12 @@
     "express": "^4.17.3",
     "jotai": "^1.6.3",
     "lamina": "^1.1.13",
+    "lodash-es": "^4.17.21",
     "moment": "^2.29.2",
     "postprocessing": "^6.26.3",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
+    "socket.io": "^4.4.1",
     "styled-components": "^5.3.5",
     "three": "^0.139.2",
     "uuid": "^8.3.2"

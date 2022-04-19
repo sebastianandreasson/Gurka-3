@@ -1,10 +1,12 @@
 import * as THREE from 'three'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useSphere } from '@react-three/cannon'
 import { useThree, useFrame } from '@react-three/fiber'
 import { PointerLockControls } from '@react-three/drei'
 import { useAtom } from 'jotai'
 import { exploringAtom } from '../state'
+import { useSocket } from '../hooks/socket'
+import throttle from 'lodash-es/throttle'
 
 const SPEED = 5
 const keys = {
@@ -44,6 +46,7 @@ const usePlayerControls = () => {
 }
 
 export const Player = (props) => {
+  const socket = useSocket()
   const [, setExploring] = useAtom(exploringAtom)
   const [ref, api] = useSphere(() => ({
     mass: 1,
@@ -54,7 +57,14 @@ export const Player = (props) => {
   const { forward, backward, left, right, jump } = usePlayerControls()
   const { camera } = useThree()
   const velocity = useRef([0, 0, 0])
+  const throttled = useCallback(
+    throttle((pos) => {
+      socket.emit('pos', pos)
+    }, 200),
+    []
+  )
   useEffect(() => api.velocity.subscribe((v) => (velocity.current = v)), [])
+  useEffect(() => api.position.subscribe(throttled), [])
   useFrame(() => {
     ref.current.getWorldPosition(camera.position)
     frontVector.set(0, 0, Number(backward) - Number(forward))

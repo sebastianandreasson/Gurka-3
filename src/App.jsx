@@ -1,11 +1,16 @@
 import React from 'react'
 import { Canvas } from '@react-three/fiber'
-import { Environment, MeshReflectorMaterial } from '@react-three/drei'
+import {
+  BakeShadows,
+  Environment,
+  MeshReflectorMaterial,
+  useTexture,
+} from '@react-three/drei'
 import Cucumber from './components/Cucumber'
 
 import Page from './Page'
 import { useAtomValue } from 'jotai'
-import { colorAtom, exploringAtom } from './state'
+import { colorAtom, exploringAtom, visitorsAtom } from './state'
 import { Player } from './components/Player'
 import { Physics, usePlane } from '@react-three/cannon'
 import Frames from './components/Frames'
@@ -13,8 +18,11 @@ import Fog from './components/Fog'
 import Effects from './Effects'
 import Structure from './components/Structure'
 import { Perf } from 'r3f-perf'
+import { useSocket } from './hooks/socket'
+import Visitors from './components/Visitors'
 
 export const Ground = (props) => {
+  const texture = useTexture('/floor_normal.jpeg')
   const [ref] = usePlane(() => ({ rotation: [-Math.PI / 2, 0, 0], ...props }))
   return (
     <group position={[0, -0.075, 0]}>
@@ -27,7 +35,7 @@ export const Ground = (props) => {
         <planeGeometry args={[500, 500]} />
         <MeshReflectorMaterial
           blur={[400, 100]}
-          resolution={2048}
+          resolution={512}
           mixBlur={1.2}
           mixStrength={2}
           roughness={0.75}
@@ -36,7 +44,11 @@ export const Ground = (props) => {
           maxDepthThreshold={1.5}
           // color={props.color}
           color="#E9EDF0"
-          metalness={0.75}
+          metalness={0.4}
+          // normalMap={texture}
+          // dis={25}
+          // distortion={100}
+          // depthToBlurRatioBias={0.9}
         />
       </mesh>
     </group>
@@ -49,26 +61,51 @@ const App = () => {
   return (
     <div id="canvas">
       <Canvas shadows>
-        <Perf />
-        <ambientLight color={color} />
-        <directionalLight
-          color={color}
-          castShadow
-          shadow-mapSize-height={1024}
-          shadow-mapSize-width={1024}
-        />
+        {/* <Perf /> */}
+        <ambientLight intensity={0.9} color={color} />
+        <group>
+          <spotLight
+            castShadow
+            intensity={5}
+            angle={0.1}
+            position={[-200, 220, -100]}
+            shadow-mapSize={[256, 256]}
+            shadow-bias={-0.000001}
+            color="#E87B38"
+          />
+          <spotLight
+            angle={0.1}
+            position={[-250, 120, -200]}
+            intensity={1}
+            castShadow
+            shadow-mapSize={[50, 50]}
+            shadow-bias={-0.000001}
+            color="#E87B38"
+          />
+          <spotLight
+            angle={0.1}
+            position={[250, 120, 200]}
+            intensity={1}
+            castShadow
+            shadow-mapSize={[50, 50]}
+            shadow-bias={-0.000001}
+            color="#E94F37"
+          />
+        </group>
         <Fog color={color} />
         <color attach="background" args={[color]} />
         <Cucumber scale={0.05} position={[-0.25, 0.15, 2]} />
-        <Cucumber position={[-5, 2, 10]} />
-        <Frames />
+        {/* <Cucumber position={[-5, 2, 10]} /> */}
+        {/* <Frames /> */}
         <Structure />
         <Physics>
           {exploring && <Player />}
           <Ground color={color} />
         </Physics>
+        {/* <Visitors /> */}
         <Environment preset="park" />
         <Effects />
+        <BakeShadows />
       </Canvas>
       <Page />
     </div>

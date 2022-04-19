@@ -10,8 +10,6 @@ const Container = styled.div`
   > h1 {
     margin: 0;
     padding: 0;
-    height: 7rem;
-    font-size: 8rem;
     font-family: 'Playfair Display', serif;
   }
 
@@ -30,15 +28,32 @@ const MainTitle = styled.h1`
 
   > span {
     font-style: italic;
+    font-size: 8rem;
     font-weight: 200;
   }
   > strong {
-    font-family: 'Playfair Display', serif;
+    height: 7rem;
+    font-size: 8rem;
     font-weight: 900;
     line-height: 4rem;
   }
 
   opacity: ${(props) => (props.visible ? 1 : 0)};
+
+  @media (max-width: 768px) {
+    top: 2rem;
+    left: 0;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    > span {
+      font-size: 1.5em;
+    }
+    > strong {
+      margin-left: 0rem;
+      font-size: 2em;
+    }
+  }
 `
 const SmallTitle = styled.h1`
   left: 2rem;
@@ -48,13 +63,13 @@ const SmallTitle = styled.h1`
   flex-direction: row;
 
   > span {
-    font-size: 3rem;
+    font-size: 3em;
     font-style: italic;
     font-weight: 200;
   }
   > strong {
     margin-left: 0.5rem;
-    font-size: 3rem;
+    font-size: 3em;
     font-family: 'Playfair Display', serif;
     font-weight: 900;
   }
@@ -68,7 +83,7 @@ const ExploreButton = styled.span`
   left: 2rem;
   bottom: 0;
 
-  font-size: 2rem;
+  font-size: 2em;
   font-weight: 300;
   cursor: pointer;
   border-bottom: 1px solid rgba(0, 0, 0, 0.25);
@@ -80,7 +95,7 @@ const EscapeText = styled.span`
   left: 2rem;
   top: 1.5rem;
   width: 200px;
-  font-size: 1rem;
+  font-size: 1em;
   font-weight: 300;
 
   opacity: ${(props) => (props.visible ? 1 : 0)};
@@ -92,7 +107,28 @@ const Logo = styled.img`
   right: 0px;
   top: 0;
 
-  margin: 2rem;
+  margin: 2em;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+`
+const ComingSoon = styled.h2`
+  width: 200px;
+  text-align: center;
+
+  margin: 0;
+  position: absolute;
+  left: calc(50% - 100px);
+  top: 50%;
+
+  font-size: 2em;
+  font-family: 'Playfair Display', serif;
+  font-weight: 100;
+
+  @media (max-width: 768px) {
+    top: 60%;
+  }
 `
 
 const Page = () => {
@@ -111,9 +147,11 @@ const Page = () => {
         <strong>Galleri</strong>
       </SmallTitle>
 
-      <ExploreButton visible={!exploring} onClick={() => setExploring(true)}>
+      <ComingSoon>Coming soon.</ComingSoon>
+
+      {/* <ExploreButton visible={!exploring} onClick={() => setExploring(true)}>
         Explore as gurka
-      </ExploreButton>
+      </ExploreButton> */}
       <Logo src="/logo.png" />
     </Container>
   )
