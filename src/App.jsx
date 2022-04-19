@@ -19,10 +19,9 @@ import Effects from './Effects'
 import Structure from './components/Structure'
 import { Perf } from 'r3f-perf'
 import { useSocket } from './hooks/socket'
-import Visitors from './components/Visitors'
+// import Visitors from './components/Visitors'
 
 export const Ground = (props) => {
-  const texture = useTexture('/floor_normal.jpeg')
   const [ref] = usePlane(() => ({ rotation: [-Math.PI / 2, 0, 0], ...props }))
   return (
     <group position={[0, -0.075, 0]}>
@@ -45,10 +44,6 @@ export const Ground = (props) => {
           // color={props.color}
           color="#E9EDF0"
           metalness={0.4}
-          // normalMap={texture}
-          // dis={25}
-          // distortion={100}
-          // depthToBlurRatioBias={0.9}
         />
       </mesh>
     </group>
