@@ -4,7 +4,6 @@ import {
   BakeShadows,
   Environment,
   MeshReflectorMaterial,
-  useTexture,
 } from '@react-three/drei'
 import Cucumber from './components/Cucumber'
 
@@ -18,8 +17,8 @@ import Fog from './components/Fog'
 import Effects from './Effects'
 import Structure from './components/Structure'
 import { Perf } from 'r3f-perf'
-import { useSocket } from './hooks/socket'
-// import Visitors from './components/Visitors'
+import Visitors from './components/Visitors'
+import Divider from './components/Frames/Divider'
 
 export const Ground = (props) => {
   const [ref] = usePlane(() => ({ rotation: [-Math.PI / 2, 0, 0], ...props }))
@@ -41,7 +40,6 @@ export const Ground = (props) => {
           depthScale={2}
           minDepthThreshold={0.45}
           maxDepthThreshold={1.5}
-          // color={props.color}
           color="#E9EDF0"
           metalness={0.4}
         />
@@ -56,7 +54,7 @@ const App = () => {
   return (
     <div id="canvas">
       <Canvas shadows>
-        {/* <Perf /> */}
+        <Perf />
         <ambientLight intensity={0.9} color={color} />
         <group>
           <spotLight
@@ -89,15 +87,15 @@ const App = () => {
         </group>
         <Fog color={color} />
         <color attach="background" args={[color]} />
-        <Cucumber scale={0.05} position={[-0.25, 0.15, 2]} />
-        {/* <Cucumber position={[-5, 2, 10]} /> */}
-        {/* <Frames /> */}
+        <Cucumber scale={0.05} />
+        <Frames />
+        <Divider position={[-0.1, 0, 0.25]} scale={0.75} full short />
         <Structure />
         <Physics>
           {exploring && <Player />}
           <Ground color={color} />
         </Physics>
-        {/* <Visitors /> */}
+        <Visitors />
         <Environment preset="park" />
         <Effects />
         <BakeShadows />

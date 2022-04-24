@@ -68,12 +68,12 @@ const Effects = () => {
             blur={true} // Whether the god rays should be blurred to reduce artifacts.
           />
         )}
-        {/* <SSAO
+        <SSAO
           blendFunction={BlendFunction.MULTIPLY} // Use NORMAL to see the effect
           samples={31}
           radius={5}
           intensity={25}
-        /> */}
+        />
       </EffectComposer>
     </Suspense>
   )

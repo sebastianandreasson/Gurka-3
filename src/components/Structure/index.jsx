@@ -1,13 +1,6 @@
 import * as THREE from 'three'
-import {
-  BakeShadows,
-  Instance,
-  Instances,
-  Merged,
-  useGLTF,
-} from '@react-three/drei'
+import { Instance, Instances, useGLTF } from '@react-three/drei'
 import React from 'react'
-import ColumnModel from './ColumnModel'
 
 const size = 20
 const generateGrid = (width) => {
@@ -34,12 +27,18 @@ const roofPositions = grid[0]
   })
   .flatMap((x) => x)
 const roofGeometry = new THREE.PlaneBufferGeometry(roofWidth * 0.7, 1500)
+const roofMaterial = new THREE.MeshStandardMaterial({
+  color: '#FAFAFA',
+})
 
 const Roof = () => {
   return (
-    <Instances castShadow geometry={roofGeometry} position={[100, 0, 0]}>
-      {/* <meshStandardMaterial color="#FAFAFA" opacity={0.01} transparent /> */}
-      <meshStandardMaterial color="#FAFAFA" />
+    <Instances
+      castShadow
+      geometry={roofGeometry}
+      material={roofMaterial}
+      position={[100, 0, 0]}
+    >
       {roofPositions.map((pos, i) => (
         <Instance
           position={pos}
@@ -52,7 +51,7 @@ const Roof = () => {
 }
 
 const Structure = () => {
-  const { nodes, materials } = useGLTF('/column2.glb')
+  const { nodes, materials } = useGLTF('/column.glb')
   return (
     <>
       <Instances
@@ -76,6 +75,6 @@ const Structure = () => {
   )
 }
 
-useGLTF.preload('/column2.glb')
+useGLTF.preload('/column.glb')
 
 export default Structure

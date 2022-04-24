@@ -3,8 +3,9 @@ import React, { useRef, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { useCursor, Image, Text, Html } from '@react-three/drei'
 import styled from 'styled-components'
-import { useAtomValue } from 'jotai'
-import { selectedGurkAtom } from '../../state'
+import { useAtom, useAtomValue } from 'jotai'
+import { gurkAtom, selectedGurkAtom } from '../../state'
+import Divider from './Divider'
 
 const SliderInput = styled.input`
   appearance: none;
@@ -24,16 +25,77 @@ const SliderInput = styled.input`
   }
 `
 
+const LeftButton = styled.div`
+  cursor: pointer;
+  position: absolute;
+  left: -350px;
+  top: -250px;
+  width: 0;
+  height: 0;
+
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+
+  border-right: 20px solid #252525;
+
+  @media (max-width: 768px) {
+    left: -125px;
+    top: -200px;
+
+    border-top: 45px solid transparent;
+    border-bottom: 45px solid transparent;
+    border-right 60px solid #252525;
+  }
+`
+const RightButton = styled.div`
+  cursor: pointer;
+  position: absolute;
+  right: -350px;
+  top: -250px;
+  width: 0;
+  height: 0;
+
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-left: 20px solid #252525;
+
+  @media (max-width: 768px) {
+    right: -125px;
+    top: -200px;
+
+    border-top: 45px solid transparent;
+    border-bottom: 45px solid transparent;
+    border-left: 60px solid #252525;
+  }
+`
+
 const Slider = ({ value, max, setValue }) => {
+  const gurkor = useAtomValue(gurkAtom)
+  const [name, setGurka] = useAtom(selectedGurkAtom)
+  const currentIndex = gurkor.findIndex((gurk) => gurk.name === name)
+  const onClick = (e, direction) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (direction === 'left') {
+      const newIndex = currentIndex === 0 ? gurkor.length - 1 : currentIndex - 1
+      setGurka(gurkor[newIndex].name)
+    } else {
+      const newIndex = currentIndex === gurkor.length - 1 ? 0 : currentIndex + 1
+      setGurka(gurkor[newIndex].name)
+    }
+  }
+
   return (
     <Html
       center
       style={{ top: 80, width: '250px' }}
       scale={0.15}
-      position={[0, -0.05, 0.025]}
+      position={[0, 0.15, 0]}
       transform
       occlude
     >
+      <LeftButton onClick={(e) => onClick(e, 'left')} />
+      <RightButton onClick={(e) => onClick(e, 'right')} />
       <SliderInput
         background="#252525"
         type="range"
@@ -76,13 +138,18 @@ function Frame({
 
   return (
     <group {...props}>
+      <mesh position={[0, 0.9, -0.25]}>
+        <boxBufferGeometry args={[4, 3, 0.25]} />
+        <meshStandardMaterial color="#FAFAFA" />
+      </mesh>
+      <Divider position={[-1.25, 0, 0.75]} length={2.5} />
       <mesh
         name={name}
         castShadow
         onPointerOver={(e) => (e.stopPropagation(), hover(true))}
         onPointerOut={() => hover(false)}
         scale={[1, GOLDENRATIO, 0.05]}
-        position={[0, GOLDENRATIO / 2, 0]}
+        position={[0, GOLDENRATIO / 2 + 0.25, 0]}
       >
         <boxGeometry />
         <meshStandardMaterial

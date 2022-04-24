@@ -59,7 +59,10 @@ export const Player = (props) => {
   const velocity = useRef([0, 0, 0])
   const throttled = useCallback(
     throttle((pos) => {
-      socket.emit('pos', pos)
+      socket.emit('pos', {
+        pos,
+        rotation: [camera.rotation.x, camera.rotation.y, camera.rotation.z],
+      })
     }, 200),
     []
   )

@@ -25,6 +25,7 @@
     "@react-three/drei": "^9.4.2",
     "@react-three/fiber": "^8.0.11",
     "@react-three/postprocessing": "^2.3.2",
+    "@turf/turf": "^6.5.0",
     "aws-sdk": "^2.1116.0",
     "axios": "^0.26.1",
     "cors": "^2.8.5",

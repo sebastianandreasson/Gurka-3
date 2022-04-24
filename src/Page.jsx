@@ -57,19 +57,19 @@ const MainTitle = styled.h1`
 `
 const SmallTitle = styled.h1`
   left: 2rem;
-  top: 2rem;
+  top: 1.5rem;
   position: absolute;
   display: flex;
   flex-direction: row;
 
   > span {
-    font-size: 3em;
+    font-size: 2em;
     font-style: italic;
     font-weight: 200;
   }
   > strong {
     margin-left: 0.5rem;
-    font-size: 3em;
+    font-size: 2em;
     font-family: 'Playfair Display', serif;
     font-weight: 900;
   }
@@ -147,11 +147,11 @@ const Page = () => {
         <strong>Galleri</strong>
       </SmallTitle>
 
-      <ComingSoon>Coming soon.</ComingSoon>
+      {/* <ComingSoon>Coming soon.</ComingSoon> */}
 
-      {/* <ExploreButton visible={!exploring} onClick={() => setExploring(true)}>
+      <ExploreButton visible={!exploring} onClick={() => setExploring(true)}>
         Explore as gurka
-      </ExploreButton> */}
+      </ExploreButton>
       <Logo src="/logo.png" />
     </Container>
   )

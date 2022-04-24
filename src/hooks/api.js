@@ -12,7 +12,6 @@ export const useGurkor = () => {
 
   useEffect(() => {
     api.get('/gurkor').then((res) => {
-      console.log(res)
       setGurkor(res.data)
     })
   }, [])
