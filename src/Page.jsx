@@ -147,7 +147,7 @@ const Page = () => {
         <strong>Galleri</strong>
       </SmallTitle>
 
-      {/* <ComingSoon>Coming soon.</ComingSoon> */}
+      <ComingSoon>Coming soon.</ComingSoon>
 
       <ExploreButton visible={!exploring} onClick={() => setExploring(true)}>
         Explore as gurka

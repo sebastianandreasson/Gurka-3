@@ -12,7 +12,7 @@ export const useGurkor = () => {
 
   useEffect(() => {
     api.get('/gurkor').then((res) => {
-      setGurkor(res.data)
+      setGurkor(res.data.sort((a, b) => a.sort - b.sort))
     })
   }, [])
 

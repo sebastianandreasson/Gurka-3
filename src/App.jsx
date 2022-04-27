@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Canvas } from '@react-three/fiber'
 import {
   BakeShadows,
@@ -19,8 +19,10 @@ import Structure from './components/Structure'
 import { Perf } from 'r3f-perf'
 import Visitors from './components/Visitors'
 import Divider from './components/Frames/Divider'
+import { isMobile } from './utils'
 
 export const Ground = (props) => {
+  const resolution = useMemo(() => (isMobile() ? 256 : 512))
   const [ref] = usePlane(() => ({ rotation: [-Math.PI / 2, 0, 0], ...props }))
   return (
     <group position={[0, -0.075, 0]}>
@@ -33,7 +35,7 @@ export const Ground = (props) => {
         <planeGeometry args={[500, 500]} />
         <MeshReflectorMaterial
           blur={[400, 100]}
-          resolution={512}
+          resolution={resolution}
           mixBlur={1.2}
           mixStrength={2}
           roughness={0.75}
@@ -53,8 +55,8 @@ const App = () => {
   const color = useAtomValue(colorAtom)
   return (
     <div id="canvas">
-      <Canvas shadows>
-        <Perf />
+      <Canvas shadows performance={{ min: 0.5, current: 0.5 }}>
+        {/* <Perf /> */}
         <ambientLight intensity={0.9} color={color} />
         <group>
           <spotLight
@@ -88,14 +90,14 @@ const App = () => {
         <Fog color={color} />
         <color attach="background" args={[color]} />
         <Cucumber scale={0.05} />
-        <Frames />
-        <Divider position={[-0.1, 0, 0.25]} scale={0.75} full short />
+        {/* <Frames /> */}
+        {/* <Divider position={[-0.1, 0, 0.25]} scale={0.75} full short /> */}
         <Structure />
         <Physics>
           {exploring && <Player />}
           <Ground color={color} />
         </Physics>
-        <Visitors />
+        {/* <Visitors /> */}
         <Environment preset="park" />
         <Effects />
         <BakeShadows />
