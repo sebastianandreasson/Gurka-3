@@ -1,24 +1,13 @@
-import React, { forwardRef, Suspense, useEffect, useRef, useState } from 'react'
-import { Canvas } from '@react-three/fiber'
-import {
-  Circle,
-  Environment,
-  MeshReflectorMaterial,
-  PointerLockControls,
-  Sphere,
-  SpotLight,
-} from '@react-three/drei'
-import Cucumber from './components/Cucumber'
+import React, { Suspense, useEffect, useRef, useState } from 'react'
+import { Sphere } from '@react-three/drei'
 import {
   DepthOfField,
   EffectComposer,
   GodRays,
   Noise,
-  SSAO,
   Vignette,
 } from '@react-three/postprocessing'
-import { BlendFunction, Resizer, KernelSize } from 'postprocessing'
-import { Mesh } from 'three'
+import { BlendFunction, KernelSize, Resizer } from 'postprocessing'
 
 const Sun = ({ setMesh }) => {
   const ref = useRef()
@@ -29,9 +18,7 @@ const Sun = ({ setMesh }) => {
   }, [ref])
   return (
     <Sphere args={[10, 50]} ref={ref} position={[0, 30, -25]}>
-      {/* <meshBasicMaterial color={'#FAFAFA'} /> */}
       <meshBasicMaterial color="#E9EDF0" />
-      {/* <meshBasicMaterial color="red" /> */}
     </Sphere>
   )
 }
@@ -42,7 +29,7 @@ const Effects = () => {
     <Suspense fallback={null}>
       <Sun setMesh={setLightMesh} />
       <EffectComposer>
-        <Noise opacity={0.05} />
+        <Noise opacity={0.025} />
         <DepthOfField
           focusDistance={0}
           focalLength={0.4}
@@ -68,12 +55,6 @@ const Effects = () => {
             blur={true} // Whether the god rays should be blurred to reduce artifacts.
           />
         )}
-        <SSAO
-          blendFunction={BlendFunction.MULTIPLY} // Use NORMAL to see the effect
-          samples={31}
-          radius={5}
-          intensity={25}
-        />
       </EffectComposer>
     </Suspense>
   )

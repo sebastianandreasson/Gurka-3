@@ -6,8 +6,20 @@ import { useAtom, useAtomValue } from 'jotai'
 import { exploringAtom, selectedGurkAtom } from '../../state'
 import { useGurkor } from '../../hooks/api'
 import { isMobile } from '../../utils'
+import { BakeShadows } from '@react-three/drei'
 
-const GOLDENRATIO = 1.61803398875
+const ASPECT_RATIO = 1.77777778
+
+const EmptyWall = (props) => {
+  return (
+    <group {...props}>
+      <mesh position={[0, 0.9, -0.25]}>
+        <boxBufferGeometry args={[4, 3, 0.25]} />
+        <meshStandardMaterial color="#FAFAFA" />
+      </mesh>
+    </group>
+  )
+}
 
 function Frames({ q = new THREE.Quaternion(), p = new THREE.Vector3() }) {
   const lerpSpeed = useMemo(() => (isMobile() ? 0.1 : 0.025))
@@ -21,9 +33,9 @@ function Frames({ q = new THREE.Quaternion(), p = new THREE.Vector3() }) {
     if (clicked.current) {
       clicked.current.parent.updateWorldMatrix(true, true)
       if (isMobile()) {
-        clicked.current.parent.localToWorld(p.set(0, GOLDENRATIO / 2, 4))
+        clicked.current.parent.localToWorld(p.set(0, ASPECT_RATIO / 2, 4))
       } else {
-        clicked.current.parent.localToWorld(p.set(0, GOLDENRATIO / 2, 1.5))
+        clicked.current.parent.localToWorld(p.set(0, ASPECT_RATIO / 2, 1.5))
       }
       clicked.current.parent.getWorldQuaternion(q)
     } else {
@@ -44,6 +56,12 @@ function Frames({ q = new THREE.Quaternion(), p = new THREE.Vector3() }) {
       {gurkor.map((props) => (
         <Frame key={props.name} {...props} />
       ))}
+      {gurkor.length && <BakeShadows />}
+      {!gurkor.length && (
+        <>
+          <EmptyWall position={[0, 0, -8]} />
+        </>
+      )}
     </group>
   )
 }

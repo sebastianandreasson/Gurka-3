@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { Canvas } from '@react-three/fiber'
 import {
-  BakeShadows,
+  AdaptiveDpr,
   Environment,
   MeshReflectorMaterial,
 } from '@react-three/drei'
@@ -9,7 +9,7 @@ import Cucumber from './components/Cucumber'
 
 import Page from './Page'
 import { useAtomValue } from 'jotai'
-import { colorAtom, exploringAtom, visitorsAtom } from './state'
+import { colorAtom, exploringAtom } from './state'
 import { Player } from './components/Player'
 import { Physics, usePlane } from '@react-three/cannon'
 import Frames from './components/Frames'
@@ -55,8 +55,7 @@ const App = () => {
   const color = useAtomValue(colorAtom)
   return (
     <div id="canvas">
-      <Canvas shadows performance={{ min: 0.5, current: 0.5 }}>
-        {/* <Perf /> */}
+      <Canvas shadows performance={{ min: 0.25, max: 1, current: 0.5 }}>
         <ambientLight intensity={0.9} color={color} />
         <group>
           <spotLight
@@ -89,18 +88,20 @@ const App = () => {
         </group>
         <Fog color={color} />
         <color attach="background" args={[color]} />
-        <Cucumber scale={0.05} />
-        {/* <Frames /> */}
-        {/* <Divider position={[-0.1, 0, 0.25]} scale={0.75} full short /> */}
+        <group position={[0, 0, 8]}>
+          <Cucumber position={[-0.25, 0, -2]} scale={0.05} />
+          <Divider position={[-0.35, 0, -1.75]} scale={0.75} full short />
+        </group>
+        <Frames />
         <Structure />
         <Physics>
           {exploring && <Player />}
           <Ground color={color} />
         </Physics>
-        {/* <Visitors /> */}
+        <Visitors />
         <Environment preset="park" />
         <Effects />
-        <BakeShadows />
+        <AdaptiveDpr pixelated />
       </Canvas>
       <Page />
     </div>

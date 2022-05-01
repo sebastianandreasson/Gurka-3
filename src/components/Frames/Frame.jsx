@@ -1,11 +1,11 @@
 import * as THREE from 'three'
-import React, { useRef, useState } from 'react'
-import { useFrame } from '@react-three/fiber'
-import { useCursor, Image, Text, Html } from '@react-three/drei'
+import React, { Suspense, useEffect, useRef, useState } from 'react'
+import { Image, Text, Html } from '@react-three/drei'
 import styled from 'styled-components'
 import { useAtom, useAtomValue } from 'jotai'
 import { gurkAtom, selectedGurkAtom } from '../../state'
 import Divider from './Divider'
+import Podium from './Podium'
 
 const SliderInput = styled.input`
   appearance: none;
@@ -108,7 +108,8 @@ const Slider = ({ value, max, setValue }) => {
   )
 }
 
-const GOLDENRATIO = 1.61803398875
+const ASPECT_RATIO = 1.77777778
+let imageCache = {}
 function Frame({
   images,
   name,
@@ -118,23 +119,39 @@ function Frame({
   ...props
 }) {
   const selected = useAtomValue(selectedGurkAtom)
-  const [hovered, hover] = useState(false)
-  const [index, setIndex] = useState(1)
-  const image = useRef()
+  const [autoplay, toogleAutoPlay] = useState(false)
+  const [index, setIndex] = useState(images.length - 1)
   const frame = useRef()
-  useCursor(hovered)
-  useFrame(() => {
-    image.current.scale.x = THREE.MathUtils.lerp(
-      image.current.scale.x,
-      0.85 * (hovered ? 0.9 : 1),
-      0.1
-    )
-    image.current.scale.y = THREE.MathUtils.lerp(
-      image.current.scale.y,
-      0.9 * (hovered ? 0.955 : 1),
-      0.1
-    )
-  })
+
+  useEffect(() => {
+    if (!images.length) return
+    if (!imageCache[name]) {
+      imageCache[name] = {}
+    }
+
+    const from = Math.max(0, index - 10)
+    const to = Math.min(images.length, index + 10)
+
+    for (let i = from; i < to; i++) {
+      if (!imageCache[name][i]) {
+        const preloadImage = new window.Image()
+        preloadImage.src = images[i].url
+        imageCache[name][i] = preloadImage
+      }
+    }
+  }, [images, index])
+
+  useEffect(() => {
+    let interval = setInterval(() => {
+      if (autoplay) {
+        setIndex((index) => (index + 1) % images.length)
+      }
+    }, 100)
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [autoplay, images, index])
 
   return (
     <group {...props}>
@@ -143,13 +160,12 @@ function Frame({
         <meshStandardMaterial color="#FAFAFA" />
       </mesh>
       <Divider position={[-1.25, 0, 0.75]} length={2.5} />
+      <Podium onClick={() => toogleAutoPlay(!autoplay)} />
       <mesh
         name={name}
         castShadow
-        onPointerOver={(e) => (e.stopPropagation(), hover(true))}
-        onPointerOut={() => hover(false)}
-        scale={[1, GOLDENRATIO, 0.05]}
-        position={[0, GOLDENRATIO / 2 + 0.25, 0]}
+        scale={[1, ASPECT_RATIO, 0.05]}
+        position={[0, ASPECT_RATIO / 2 + 0.25, 0]}
       >
         <boxGeometry />
         <meshStandardMaterial
@@ -167,21 +183,38 @@ function Frame({
           <boxGeometry />
           <meshBasicMaterial toneMapped={false} fog={false} />
         </mesh>
-        <Image
-          raycast={() => null}
-          ref={image}
-          position={[0, 0, 0.7]}
-          url={images[index - 1].url}
-        />
+        <Suspense fallback={null}>
+          <Image
+            raycast={() => null}
+            position={[0, 0, 0.7]}
+            scale={[0.9, 0.93, 1]}
+            url={
+              imageCache[name] && imageCache[name][index]
+                ? imageCache[name][index].src
+                : images[index].url
+            }
+          />
+        </Suspense>
       </mesh>
       {selected && selected === name && (
-        <Slider value={index} setValue={setIndex} max={images.length} />
+        <Slider value={index} setValue={setIndex} max={images.length - 1} />
       )}
+      <Text
+        maxWidth={1}
+        anchorX="left"
+        anchorY="top"
+        position={[-0.15, 0.3, 0.03]}
+        fontSize={0.03}
+        font="/fonts/Inter-Thin.woff"
+        color="#FFF"
+      >
+        {images[index].date.slice(0, 19).replace('T', ' ')}
+      </Text>
       <Text
         maxWidth={0.1}
         anchorX="left"
         anchorY="top"
-        position={[0.55, GOLDENRATIO, 0]}
+        position={[0.55, ASPECT_RATIO, 0]}
         fontSize={0.2}
         font="/fonts/Inter-Black.woff"
         color="#151515"
@@ -192,7 +225,7 @@ function Frame({
         maxWidth={1}
         anchorX="left"
         anchorY="top"
-        position={[0.55, GOLDENRATIO - 0.225, 0]}
+        position={[0.55, ASPECT_RATIO - 0.225, 0]}
         fontSize={0.09}
         font="/fonts/Inter-ThinItalic.woff"
         color="#151515"
@@ -203,7 +236,7 @@ function Frame({
         maxWidth={1}
         anchorX="left"
         anchorY="top"
-        position={[0.55, GOLDENRATIO - 0.355, 0]}
+        position={[0.55, ASPECT_RATIO - 0.355, 0]}
         fontSize={0.04}
         font="/fonts/Inter-ThinItalic.woff"
         color="#151515"

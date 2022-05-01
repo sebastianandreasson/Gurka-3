@@ -1,7 +1,8 @@
 import { useAtom, useAtomValue } from 'jotai'
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { exploringAtom, selectedGurkAtom } from './state'
+import { isMobile } from './utils'
 
 const Container = styled.div`
   z-index: 1;
@@ -130,10 +131,42 @@ const ComingSoon = styled.h2`
     top: 60%;
   }
 `
+const CrossHair = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  border: 2px solid white;
+`
+
+const WorksBestOnDesktop = styled.span`
+  width: 200px;
+  text-align: center;
+
+  margin: 0;
+  position: absolute;
+  left: calc(50% - 100px);
+  top: 75%;
+
+  font-size: 1em;
+  font-family: 'Playfair Display', serif;
+  font-weight: 100;
+`
 
 const Page = () => {
+  const mobileLayout = useMemo(() => isMobile())
+  const [showMesage, setShowMessage] = useState(true)
   const [exploring, setExploring] = useAtom(exploringAtom)
   const selectedGurka = useAtomValue(selectedGurkAtom)
+
+  useEffect(() => {
+    setTimeout(() => {
+      setShowMessage(false)
+    }, 5000)
+  }, [])
 
   return (
     <Container>
@@ -147,11 +180,19 @@ const Page = () => {
         <strong>Galleri</strong>
       </SmallTitle>
 
-      <ComingSoon>Coming soon.</ComingSoon>
+      {exploring && <CrossHair />}
 
-      <ExploreButton visible={!exploring} onClick={() => setExploring(true)}>
-        Explore as gurka
-      </ExploreButton>
+      {!mobileLayout && (
+        <ExploreButton visible={!exploring} onClick={() => setExploring(true)}>
+          Explore as gurka
+        </ExploreButton>
+      )}
+      {mobileLayout &&
+        showMessage(
+          <WorksBestOnDesktop>
+            This website works much better on desktop
+          </WorksBestOnDesktop>
+        )}
       <Logo src="/logo.png" />
     </Container>
   )
