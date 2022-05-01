@@ -2,7 +2,7 @@ import { useAtom, useAtomValue } from 'jotai'
 import { useEffect } from 'react'
 import { globalPositions, visitorsAtom } from '../state'
 
-const socket = io(import.meta.env.VITE_SOCKET_URL, {
+const socket = io(import.meta.env.VITE_API_URL, {
   transports: ['websocket'],
 })
 
@@ -10,8 +10,8 @@ export const useSocket = () => {
   const [visitors, setVisitors] = useAtom(visitorsAtom)
 
   useEffect(() => {
-    socket.emit('activated', )
-    
+    socket.emit('activated')
+
     socket.on('visitors', (ids) => {
       console.log('socket.visitors', ids)
       setVisitors((s) => [...s, ...ids])
