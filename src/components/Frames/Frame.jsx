@@ -135,6 +135,7 @@ function Frame({
     for (let i = from; i < to; i++) {
       if (!imageCache[name][i]) {
         const preloadImage = new window.Image()
+        preloadImage.crossOrigin = 'anonymous'
         preloadImage.src = images[i].url
         imageCache[name][i] = preloadImage
       }

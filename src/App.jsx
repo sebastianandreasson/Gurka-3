@@ -55,7 +55,7 @@ const App = () => {
   const color = useAtomValue(colorAtom)
   return (
     <div id="canvas">
-      <Canvas shadows performance={{ min: 0.25, max: 1, current: 0.5 }}>
+      <Canvas shadows performance={{ min: 0.25, max: 1, current: 0.5 }} dpr={1}>
         <ambientLight intensity={0.9} color={color} />
         <group>
           <spotLight
