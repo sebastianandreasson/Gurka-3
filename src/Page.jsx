@@ -114,22 +114,13 @@ const Logo = styled.img`
     display: none;
   }
 `
-const ComingSoon = styled.h2`
-  width: 200px;
-  text-align: center;
 
-  margin: 0;
+const Instructions = styled.img`
   position: absolute;
-  left: calc(50% - 100px);
-  top: 50%;
+  left: calc(50% - 250px);
+  bottom: 10%;
 
-  font-size: 2em;
-  font-family: 'Playfair Display', serif;
-  font-weight: 100;
-
-  @media (max-width: 768px) {
-    top: 60%;
-  }
+  width: 500px;
 `
 const CrossHair = styled.div`
   position: absolute;
@@ -159,6 +150,7 @@ const WorksBestOnDesktop = styled.span`
 const Page = () => {
   const mobileLayout = useMemo(() => isMobile())
   const [showMesage, setShowMessage] = useState(true)
+  const [showInstructions, setShowInstructions] = useState(false)
   const [exploring, setExploring] = useAtom(exploringAtom)
   const selectedGurka = useAtomValue(selectedGurkAtom)
 
@@ -167,6 +159,17 @@ const Page = () => {
       setShowMessage(false)
     }, 5000)
   }, [])
+
+  useEffect(() => {
+    if (exploring) {
+      setShowInstructions(true)
+      setTimeout(() => {
+        setShowInstructions(false)
+      }, 7500)
+    } else {
+      setShowInstructions(false)
+    }
+  }, [exploring])
 
   return (
     <Container>
@@ -186,6 +189,9 @@ const Page = () => {
         <ExploreButton visible={!exploring} onClick={() => setExploring(true)}>
           Explore as gurka
         </ExploreButton>
+      )}
+      {showInstructions && (
+        <Instructions src="/instructions.png"></Instructions>
       )}
       {mobileLayout &&
         showMessage(
