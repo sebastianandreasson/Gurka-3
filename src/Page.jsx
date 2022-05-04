@@ -193,12 +193,11 @@ const Page = () => {
       {showInstructions && (
         <Instructions src="/instructions.png"></Instructions>
       )}
-      {mobileLayout &&
-        showMessage(
-          <WorksBestOnDesktop>
-            This website works much better on desktop
-          </WorksBestOnDesktop>
-        )}
+      {mobileLayout && showMessage && (
+        <WorksBestOnDesktop>
+          This website works much better on desktop
+        </WorksBestOnDesktop>
+      )}
       <Logo src="/logo.png" />
     </Container>
   )
