@@ -149,7 +149,7 @@ const WorksBestOnDesktop = styled.span`
 
 const Page = () => {
   const mobileLayout = useMemo(() => isMobile())
-  const [showMesage, setShowMessage] = useState(true)
+  const [showMessage, setShowMessage] = useState(true)
   const [showInstructions, setShowInstructions] = useState(false)
   const [exploring, setExploring] = useAtom(exploringAtom)
   const selectedGurka = useAtomValue(selectedGurkAtom)
